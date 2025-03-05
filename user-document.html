@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieList Component Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        h1, h2, h3 {
+            color: #343a40;
+        }
+        code {
+            background-color: #e9ecef;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MovieList Component Documentation</h1>
+        
+        <h2>Overview</h2>
+        <p>The <code>MovieList</code> component is a React functional component that allows users to <strong>add, edit, and delete student details</strong>. It uses <code>useState</code> for managing state dynamically.</p>
+        
+        <h2>Features</h2>
+        <ul>
+            <li>Users can enter student details (Name, Age, School, Class, Section).</li>
+            <li>Students are added to a list upon form submission.</li>
+            <li>Users can edit a student's details.</li>
+            <li>Users can delete students from the list.</li>
+        </ul>
+
+        <h2>Dependencies</h2>
+        <p>This component requires:</p>
+        <ul>
+            <li>React (for component structure and state management)</li>
+            <li>Bootstrap (for UI styling)</li>
+        </ul>
+        <p>To install Bootstrap, use:</p>
+        <pre>npm install bootstrap</pre>
+        <p>Then import it in <code>index.js</code> or <code>App.js</code>:</p>
+        <pre>import 'bootstrap/dist/css/bootstrap.min.css';</pre>
+
+        <h2>State Variables</h2>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr>
+                <th>State Variable</th>
+                <th>Type</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td><code>stdetails</code></td>
+                <td>Array</td>
+                <td>Stores student details as objects.</td>
+            </tr>
+            <tr>
+                <td><code>name</code></td>
+                <td>String</td>
+                <td>Stores the student's name input.</td>
+            </tr>
+            <tr>
+                <td><code>age</code></td>
+                <td>String</td>
+                <td>Stores the student's age input.</td>
+            </tr>
+            <tr>
+                <td><code>school</code></td>
+                <td>String</td>
+                <td>Stores the school name input.</td>
+            </tr>
+            <tr>
+                <td><code>classs</code></td>
+                <td>String</td>
+                <td>Stores the student's class input.</td>
+            </tr>
+            <tr>
+                <td><code>section</code></td>
+                <td>String</td>
+                <td>Stores the student's section input.</td>
+            </tr>
+            <tr>
+                <td><code>stid</code></td>
+                <td>String/Number</td>
+                <td>Stores the index of the student being edited. Default is <code>"noindex"</code>.</td>
+            </tr>
+        </table>
+
+        <h2>Functions</h2>
+
+        <h3>1️⃣ save(obj)</h3>
+        <p>Handles form submission to add or update a student.</p>
+        <pre>
+const save = (obj) => {
+    obj.preventDefault();
+
+    let newstudent = {
+        "sname": name, 
+        "sage": age, 
+        "sschool": school, 
+        "sclass": classs, 
+        "ssection": section
+    };
+
+    if (stid === "noindex") {
+        setstdetails([...stdetails, newstudent]);
+    } else {
+        stdetails[stid] = newstudent;
+        setstdetails([...stdetails]);
+        setstid("noindex");
+    }
+
+    // Reset form fields
+    setname(""); 
+    setage(""); 
+    setschool(""); 
+    setclasss(""); 
+    setsection("");
+};
+        </pre>
+
+        <h3>2️⃣ delstudent(index)</h3>
+        <p>Deletes a student from the list.</p>
+        <pre>
+const delstudent = (index) => {
+    stdetails.splice(index, 1);
+    setstdetails([...stdetails]);
+};
+        </pre>
+
+        <h3>3️⃣ editstudent(sd, index)</h3>
+        <p>Populates the form with student data for editing.</p>
+        <pre>
+const editstudent = (sd, index) => {
+    setstid(index);
+    setname(sd.sname);
+    setage(sd.sage);
+    setschool(sd.sschool);
+    setclasss(sd.sclass);
+    setsection(sd.ssection);
+};
+        </pre>
+
+        <h2>JSX Structure</h2>
+        <h3>Form Section</h3>
+        <pre>
+&lt;form className="form-control" onSubmit={save}&gt;
+    &lt;p&gt;Enter Name  
+        &lt;input type="text" className="form-control" onChange={obj => setname(obj.target.value)} value={name} /&gt;
+    &lt;/p&gt;
+    ...
+    &lt;div className="text-center"&gt; 
+        &lt;button className="btn btn-primary mt-3"&gt;Save&lt;/button&gt; 
+    &lt;/div&gt;
+&lt;/form&gt;
+        </pre>
+
+        <h3>Student List Section</h3>
+        <pre>
+&lt;div className="col-xl-3"&gt;
+    &lt;h1 className="text-center"&gt;Students List&lt;/h1&gt;
+    {
+        stdetails.map((sd, index) => {
+            return (
+                &lt;div key={index} className="form-control m-2"&gt;
+                    &lt;p&gt;Name: {sd.sname}&lt;/p&gt;
+                    &lt;p&gt;Age: {sd.sage} Y&lt;/p&gt;
+                    ...
+                    &lt;p className="text-center"&gt;
+                        &lt;button className="btn btn-success" onClick={() => editstudent(sd, index)} &gt; Edit &lt;/button&gt; 
+                        &lt;button className="btn btn-danger" onClick={() => delstudent(index)}&gt; Delete &lt;/button&gt;
+                    &lt;/p&gt;
+                &lt;/div&gt;
+            );
+        })
+    }
+&lt;/div&gt;
+        </pre>
+
+        <h2>Final Summary</h2>
+        <ul>
+            <li><strong>Add Student:</strong> Users can enter details and add students to the list.</li>
+            <li><strong>Edit Student:</strong> Users can update student details by clicking "Edit".</li>
+            <li><strong>Delete Student:</strong> Users can remove a student by clicking "Delete".</li>
+            <li><strong>Bootstrap UI:</strong> Styled with Bootstrap for a clean look.</li>
+            <li><strong>React Hooks:</strong> Uses <code>useState</code> for state management.</li>
+        </ul>
+    </div>
+</body>
+</html>
